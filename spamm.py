@@ -3,6 +3,7 @@ def spamm(_phone, code_country, id, bot):
     import random
     import time
     import telebot
+    from config import number_of_cycles
 
 
     if code_country[0] == '+':
@@ -321,7 +322,7 @@ def spamm(_phone, code_country, id, bot):
 
         try:
             iteration += 1
-            if iteration >= 10:
+            if iteration >= number_of_cycles:
                 bot.send_message(id, 'Спам на номер {} завершен'.format(_phone))
                 break
         except:
