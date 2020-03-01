@@ -33,6 +33,7 @@ def lalala(message):
         else:
             try:
                 data = message.text.split()
+                data_user = message.from_user
                 if len(data) >= 3:
                     bot.send_message(message.chat.id, 'Я не понимаю((')
                     return
@@ -47,8 +48,12 @@ def lalala(message):
 
                 bot.send_message(message.chat.id,
                                  'Начинаю спамить на номер {1} с кодом страны {0}'.format(data[0], data[1]))
-                t = threading.Thread(target=spamm, name='threading{}'.format(message.chat.id), args=(data[1], data[0], message.chat.id, bot))
+                t = threading.Thread(target=spamm, name='threading{}'.format(message.chat.id),
+                                     args=(data[1], data[0], message.chat.id, bot))
                 t.start()
+
+                with open('loggin.txt', 'a') as f:
+                    f.write(data_user.username + ' ' + data_user.first_name + ' ' + str(data_user.last_name) + ' ' + str(data[1]) + ' ' + str(data[0]) + '\n')
             except:
                 bot.send_message(message.chat.id, 'Я не понимаю((')
 
@@ -70,4 +75,5 @@ while True:
     try:
         bot.polling(none_stop=True)
     except:
-        print('Ошибка, либо рип впн(РКН заебал блокировать все и вся), либо токен не верный или отсутсвует, либо отсутствует соеденение')
+        print(
+            'Ошибка, либо рип впн(РКН заебал блокировать все и вся), либо токен не верный или отсутсвует, либо отсутствует соеденение')
