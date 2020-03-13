@@ -1,4 +1,4 @@
-	import telebot
+import telebot
 import config
 import random
 import threading
@@ -16,10 +16,9 @@ def welcome(message):
     item2 = types.KeyboardButton("Спонсорство")
  
     markup.add(item1, item2)
- 
     bot.send_message(message.chat.id,
                      "Добро пожаловать, {0.first_name}!\nЯ - <b>{1.first_name}</b>, бот созданный чтобы быть спамить на номера телефона, все что нужно, отпраить мне код страны и номер телефона через пробел".format(
-                         message.from_user, bot.get_me()),
+                         message.from_user, bot.get_me()))
 
 
 @bot.message_handler(content_types=['text'])
