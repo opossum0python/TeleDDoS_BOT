@@ -1,24 +1,25 @@
-import telebot
+	import telebot
 import config
 import random
 import threading
 from spamm import spamm
+from telebot import types
+ 
 
 bot = telebot.TeleBot(config.TOKEN)
 
 @bot.message_handler(commands=['start'])
-def welcome(message):
+def welcome(message): 
     # keyboard
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = types.KeyboardButton("Что я такое")
     item2 = types.KeyboardButton("Спонсорство")
-
+ 
     markup.add(item1, item2)
-
+ 
     bot.send_message(message.chat.id,
                      "Добро пожаловать, {0.first_name}!\nЯ - <b>{1.first_name}</b>, бот созданный чтобы быть спамить на номера телефона, все что нужно, отпраить мне код страны и номер телефона через пробел".format(
                          message.from_user, bot.get_me()),
-                     parse_mode='html', reply_markup=markup)
 
 
 @bot.message_handler(content_types=['text'])
@@ -41,6 +42,7 @@ def lalala(message):
                     bot.send_message(message.chat.id, 'Я не понимаю((')
                     return
                 _phone = data[0] + data[1]
+                print(_phone)
                 for lett in _phone:
                     if lett not in '1234567890+':
                         bot.send_message(message.chat.id, 'Я не понимаю((')
@@ -50,10 +52,10 @@ def lalala(message):
                                  'Начинаю спамить на номер {1} с кодом страны {0}'.format(data[0], data[1]))
                 t = threading.Thread(target=spamm, name='threading{}'.format(message.chat.id),
                                      args=(data[1], data[0], message.chat.id, bot))
-                t.start()
 
                 with open('loggin.txt', 'a') as f:
-                    f.write(data_user.username + ' ' + data_user.first_name + ' ' + str(data_user.last_name) + ' ' + str(data[1]) + ' ' + str(data[0]) + '\n')
+                    f.write(data_user.username + ' ' + data_user.first_name + ' ' + str(data_user.last_name) + ' ' + data[1] + ' ' + data[0] + '\n')
+                t.start()
             except:
                 bot.send_message(message.chat.id, 'Я не понимаю((')
 
@@ -63,17 +65,15 @@ def callback_inline(call):
     try:
         if call.message:
             if call.data == 'good':
-                bot.send_message(call.message.chat.id,
-                                 'Я бот который спамит сообщения, что бы начать спамить, введи номер и код страны через пробел')
+                bot.send_message(call.message.chat.id, 'Я бот который спамит сообщения, что бы начать спамить, введи номер и код страны через пробел')
             elif call.data == 'bad':
                 bot.send_message(call.message.chat.id, 'Реквизиты для спонсорства: QIWI №№№№№  VTB №№№№№№№№№№')
     except Exception as e:
         print(repr(e))
 
 
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except:
-        print(
-            'Ошибка, либо рип впн(РКН заебал блокировать все и вся), либо токен не верный или отсутсвует, либо отсутствует соеденение')
+
+try:
+     bot.polling(none_stop=True)
+except:
+    print('Ошибка, либо рип впн(РКН заебал блокировать все и вся), либо токен не верный или отсутсвует, либо отсутствует соеденение')
